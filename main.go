@@ -24,6 +24,7 @@ func Result(i interface{}) {
 
 	rv := reflect.ValueOf(i)
 	rt := rv.Type()
+	fmt.Println("type : ",rt)
 	switch i.(type) {
 	case S:
 		for i := 0; i < rt.NumField(); i++ {
@@ -40,7 +41,7 @@ func Result(i interface{}) {
 			fmt.Printf("%v => length=%d capacity=%d value=%v address=%p \n", rf, ri.Len(), ri.Cap(), ri, &rv)
 		}
 	default:
-		fmt.Println("default!!")
+		fmt.Println("該当なし")
 	}
 }
 
@@ -189,36 +190,30 @@ func main() {
 	fmt.Printf("tmp2  => capacity=%d  address=%p value=%v\n", cap(tmp2), tmp2, tmp2)
 	fmt.Printf("hoge2 => capacity=%d  address=%p value=%v\n", cap(hoge2), hoge2, hoge2)
 
-	// array
+
+	// reflectで配列とスライスを試してみる
+
+	// structに内包したarrayを試す
 	a := A{
 		[2]int{},
 		[4]int{},
 		[4]int{1, 2, 3},
 	}
-
-	fmt.Printf("aaa1 value=%v, address=%p\n", a.array1, &a.array1)
-	fmt.Printf("aaa2 value=%v, address=%p\n", a.array2, &a.array2)
-	fmt.Printf("aaa3 value=%v, address=%p\n", a.array3, &a.array3)
 	Result(a)
 
-	// sliceの宣言
+	// structに内包したsliceを試す
 	s := S {
 		slice2: []int{1, 2, 3, 4},
 		slice3: make([]int, 10),
 		slice5: make([]int, 0, 1),
 	}
-	Result(s)
 
-	fmt.Printf("S value=%v, address=%p\n", s, &s)
-	fmt.Printf("sss1 value=%v, address=%p\n", s.slice1, s.slice1)
-	fmt.Printf("sss2 value=%v, address=%p\n", s.slice2, s.slice2)
-	fmt.Printf("sss3 value=%v, address=%p\n", s.slice3, s.slice3)
-	fmt.Printf("sss4 value=%v, address=%p\n", s.slice4, s.slice4)
-	fmt.Printf("sss5 value=%v, address=%p\n", s.slice5, s.slice5)
+	// 拡張していくとどうなるか見てみる
+	Result(s)
 	s.slice4 = append(s.slice4, 2)
 	Result(s)
 	s.slice5 = append(s.slice5, 1)
-	Result(s.slice5)
+	Result(s)
 	s.slice5 = append(s.slice5, 2)
 	Result(s)
 	s.slice5 = append(s.slice5, 3)
